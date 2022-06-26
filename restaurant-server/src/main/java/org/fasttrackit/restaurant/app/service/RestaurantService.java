@@ -2,6 +2,7 @@ package org.fasttrackit.restaurant.app.service;
 
 import lombok.RequiredArgsConstructor;
 import org.fasttrackit.restaurant.app.entity.RestaurantEntity;
+import org.fasttrackit.restaurant.app.exception.InvalidParametersException;
 import org.fasttrackit.restaurant.app.model.RestaurantFilter;
 import org.fasttrackit.restaurant.app.model.mapper.RestaurantMapper;
 import org.fasttrackit.restaurant.app.repository.RestaurantRepository;
@@ -32,5 +33,16 @@ public class RestaurantService {
 
     public Optional<RestaurantEntity> get(int restaurantId){
         return repository.findById(restaurantId);
+    }
+
+    public RestaurantEntity createEntity(RestaurantEntity newEntity) {
+        getValidateRestaurant(newEntity);
+        return repository.save(newEntity.withId(0));
+    }
+
+    private void getValidateRestaurant(RestaurantEntity newEntity) {
+        if (newEntity == null){
+            throw new InvalidParametersException("The parameters are null");
+        }
     }
 }

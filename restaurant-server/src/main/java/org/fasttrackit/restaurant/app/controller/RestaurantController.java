@@ -7,10 +7,7 @@ import org.fasttrackit.restaurant.app.model.RestaurantFilter;
 import org.fasttrackit.restaurant.app.model.mapper.RestaurantMapper;
 import org.fasttrackit.restaurant.app.service.RestaurantService;
 import org.fasttrackit.restaurant.model.Restaurant;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,5 +40,10 @@ public class RestaurantController {
                 entity.getStars(),
                 entity.getCity(),
                 entity.getSince());
+    }
+
+    @PostMapping
+    RestaurantEntity createEntity(@RequestBody Restaurant newEntity){
+        return service.createEntity(mapper.toEntity(newEntity));
     }
 }
