@@ -1,5 +1,10 @@
 package org.fasttrackit.restaurant.app.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import lombok.RequiredArgsConstructor;
 import org.fasttrackit.restaurant.app.entity.RestaurantEntity;
 import org.fasttrackit.restaurant.app.exception.InvalidParametersException;
@@ -7,6 +12,7 @@ import org.fasttrackit.restaurant.app.exception.RestaurantNotFoundException;
 import org.fasttrackit.restaurant.app.model.RestaurantFilter;
 import org.fasttrackit.restaurant.app.model.mapper.RestaurantMapper;
 import org.fasttrackit.restaurant.app.repository.RestaurantRepository;
+import org.fasttrackit.restaurant.model.Restaurant;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,5 +62,23 @@ public class RestaurantService {
                 .withStars(newEntity.getStars())
                 .withCity(newEntity.getCity())
                 .withSince(newEntity.getSince()));
+    }
+
+    public RestaurantEntity updateEntity(int id, JsonPatch jsonPatch) {
+        return repository.findById(id)
+                .map(dbEntity -> applyPatch(dbEntity, jsonPatch))
+                .map(dbEntity -> replaceEntity(id, dbEntity))
+                .orElseThrow(() -> new RestaurantNotFoundException("Could not find person with id %s".formatted(id)));
+    }
+
+    private RestaurantEntity applyPatch(RestaurantEntity dbEntity, JsonPatch jsonPatch) {
+        try {
+            ObjectMapper jsonMapper = new ObjectMapper();
+            JsonNode jsonNode = jsonMapper.convertValue(mapper.toApi(dbEntity), JsonNode.class);
+            JsonNode patchedJson = jsonPatch.apply(jsonNode);
+            return mapper.toEntity(jsonMapper.treeToValue(patchedJson, Restaurant.class));
+        } catch (JsonProcessingException | JsonPatchException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

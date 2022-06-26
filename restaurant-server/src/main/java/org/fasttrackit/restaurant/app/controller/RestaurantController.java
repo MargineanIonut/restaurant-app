@@ -1,5 +1,6 @@
 package org.fasttrackit.restaurant.app.controller;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import lombok.RequiredArgsConstructor;
 import org.fasttrackit.restaurant.app.entity.RestaurantEntity;
 import org.fasttrackit.restaurant.app.exception.RestaurantNotFoundException;
@@ -50,5 +51,10 @@ public class RestaurantController {
     @PutMapping("{id}")
     RestaurantEntity replaceEntity(@PathVariable int id, @RequestBody Restaurant newEntity){
         return service.replaceEntity(id,mapper.toEntity(newEntity));
+    }
+
+    @PatchMapping("{id}")
+    RestaurantEntity updateEntity(@PathVariable int id, @RequestBody JsonPatch updatedEntity){
+        return service.updateEntity(id, updatedEntity);
     }
 }
