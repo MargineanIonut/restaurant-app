@@ -24,6 +24,7 @@
     <modules>
         <module>restaurant-server</module>
         <module>restaurant-application-api-model</module>
+        <module>restaurant-service-client</module>
     </modules>
 
     <properties>
