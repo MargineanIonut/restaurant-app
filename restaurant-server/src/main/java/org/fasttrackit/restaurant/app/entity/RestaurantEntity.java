@@ -24,4 +24,8 @@ public class RestaurantEntity {
     private int stars;
     private String city;
     private LocalDate since;
+
+    public RestaurantEntity(String name, int stars, String city, LocalDate since){
+        this(0,name,stars,city,since);
+    }
 }

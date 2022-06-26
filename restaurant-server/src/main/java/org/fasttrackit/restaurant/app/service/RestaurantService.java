@@ -8,6 +8,7 @@ import org.fasttrackit.restaurant.app.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +28,9 @@ public class RestaurantService {
         return filter.city() == null
                 || filter.city().stream()
                 .allMatch(name -> restaurant.getName().contains(name));
+    }
+
+    public Optional<RestaurantEntity> get(int restaurantId){
+        return repository.findById(restaurantId);
     }
 }
