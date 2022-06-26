@@ -57,4 +57,10 @@ public class RestaurantController {
     RestaurantEntity updateEntity(@PathVariable int id, @RequestBody JsonPatch updatedEntity){
         return service.updateEntity(id, updatedEntity);
     }
+
+    @DeleteMapping
+    RestaurantEntity deleteEntity(@PathVariable int id){
+        return service.deletePerson(id)
+                .orElse(null);
+    }
 }

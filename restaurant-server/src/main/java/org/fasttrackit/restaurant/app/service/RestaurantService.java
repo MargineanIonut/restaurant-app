@@ -81,4 +81,10 @@ public class RestaurantService {
             throw new RuntimeException(e);
         }
     }
+
+    public Optional<RestaurantEntity> deletePerson(int id) {
+        var person = repository.findById(id);
+        person.ifPresent(repository::delete);
+        return person;
+    }
 }
