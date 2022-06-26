@@ -3,6 +3,7 @@ package org.fasttrackit.restaurant.app.service;
 import lombok.RequiredArgsConstructor;
 import org.fasttrackit.restaurant.app.entity.RestaurantEntity;
 import org.fasttrackit.restaurant.app.exception.InvalidParametersException;
+import org.fasttrackit.restaurant.app.exception.RestaurantNotFoundException;
 import org.fasttrackit.restaurant.app.model.RestaurantFilter;
 import org.fasttrackit.restaurant.app.model.mapper.RestaurantMapper;
 import org.fasttrackit.restaurant.app.repository.RestaurantRepository;
@@ -44,5 +45,16 @@ public class RestaurantService {
         if (newEntity == null){
             throw new InvalidParametersException("The parameters are null");
         }
+    }
+
+    public RestaurantEntity replaceEntity(int id, RestaurantEntity newEntity) {
+        RestaurantEntity dbEntity = repository.findById(id)
+                .orElseThrow(() -> new RestaurantNotFoundException("Could not find person with id %s".formatted(id)));
+
+        return repository.save(dbEntity
+                .withName(newEntity.getName())
+                .withStars(newEntity.getStars())
+                .withCity(newEntity.getCity())
+                .withSince(newEntity.getSince()));
     }
 }

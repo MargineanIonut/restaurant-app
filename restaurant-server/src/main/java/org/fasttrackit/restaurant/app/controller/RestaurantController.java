@@ -46,4 +46,9 @@ public class RestaurantController {
     RestaurantEntity createEntity(@RequestBody Restaurant newEntity){
         return service.createEntity(mapper.toEntity(newEntity));
     }
+
+    @PutMapping("{id}")
+    RestaurantEntity replaceEntity(@PathVariable int id, @RequestBody Restaurant newEntity){
+        return service.replaceEntity(id,mapper.toEntity(newEntity));
+    }
 }
